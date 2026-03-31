@@ -4,8 +4,12 @@
 ===========================================
  */
 
-include { MODKIT_PILEUP  } from '../../../modules/nf-core/modkit/pileup/main'
-include { SAMTOOLS_FAIDX } from '../../../modules/nf-core/samtools/faidx/main'
+
+include { MODKIT_PILEUP                      } from '../../../modules/nf-core/modkit/pileup/main'
+include { MODKIT_PILEUP as MODKIT_PILEUP_6mA } from '../../../modules/nf-core/modkit/pileup/main'
+include { SAMTOOLS_FAIDX                     } from '../../../modules/nf-core/samtools/faidx/main'
+include { TABIX_TABIX                   } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX       as     TABIX_TABIX_6MA       } from '../../../modules/nf-core/tabix/tabix/main'
 
 /*
 ===========================================
@@ -45,13 +49,24 @@ workflow INDEX_MODKIT_PILEUP {
 
 
     // Modkit pileup
-    MODKIT_PILEUP(ch_bam_in, ch_index_ref, [[], []])
+   if (params.m6a) {
+        pileup_6mA_out = Channel.empty()
+        MODKIT_PILEUP_6mA(ch_bam_in, ch_index_ref, [[], []])
+        versions = versions.mix(MODKIT_PILEUP_6mA.out.versions.first())
 
+        MODKIT_PILEUP_6mA.out.bedgz.set { pileup_6mA_out }
+        TABIX_TABIX_6MA(MODKIT_PILEUP_6mA.out.bedgz)
+    }
+
+    MODKIT_PILEUP(ch_bam_in, ch_index_ref, [[], []])
     versions = versions.mix(MODKIT_PILEUP.out.versions.first())
 
     MODKIT_PILEUP.out.bedgz.set { pileup_out }
+    TABIX_TABIX(MODKIT_PILEUP.out.bedgz)
+    
 
     emit:
+    pileup_6mA_out
     pileup_out
     versions
 }
