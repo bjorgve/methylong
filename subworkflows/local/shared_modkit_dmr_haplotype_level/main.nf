@@ -33,7 +33,7 @@ workflow MODKIT_DMR_HAPLOTYPE_LEVEL {
     // Modkit pileup
     MODKIT_PILEUP_HAPLOTYPE_LEVEL(ch_input.bam_in, ch_input.ref_in, [[], []])
 
-    versions = versions.mix(MODKIT_PILEUP_HAPLOTYPE_LEVEL.out.versions.first())
+    versions = versions.mix(MODKIT_PILEUP_HAPLOTYPE_LEVEL.out.versions_modkit.first())
 
     MODKIT_PILEUP_HAPLOTYPE_LEVEL.out.bedgz
         .flatMap { meta, files ->

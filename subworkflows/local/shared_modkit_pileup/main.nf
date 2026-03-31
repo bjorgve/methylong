@@ -59,7 +59,7 @@ workflow INDEX_MODKIT_PILEUP {
     }
 
     MODKIT_PILEUP(ch_bam_in, ch_index_ref, [[], []])
-    versions = versions.mix(MODKIT_PILEUP.out.versions.first())
+    versions = versions.mix(MODKIT_PILEUP.out.versions_modkit.first())
 
     MODKIT_PILEUP.out.bedgz.set { pileup_out }
     TABIX_TABIX(MODKIT_PILEUP.out.bedgz)

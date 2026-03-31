@@ -43,7 +43,7 @@ workflow DSS_POPULATION_SCALE_PREPROCESS {
     // modkit pileup
     MODKIT_PILEUP_POPULATION_SCALE(ch_pileup_in.bam, ch_pileup_in.ref, [[], []])
 
-    versions = versions.mix(MODKIT_PILEUP_POPULATION_SCALE.out.versions.first())
+    versions = versions.mix(MODKIT_PILEUP_POPULATION_SCALE.out.versions_modkit.first())
 
     // gawk
     GAWK_FOR_DSS(MODKIT_PILEUP_POPULATION_SCALE.out.bedgz, [], [])

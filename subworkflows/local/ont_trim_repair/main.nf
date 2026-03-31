@@ -86,7 +86,7 @@ workflow ONT_TRIM_REPAIR {
 
     MODKIT_REPAIR(ch_repair_in)
 
-    versions = versions.mix(MODKIT_REPAIR.out.versions.first())
+    versions = versions.mix(MODKIT_REPAIR.out.versions_modkit.first())
 
     // Prepare input for alignment step
 

@@ -43,7 +43,7 @@ workflow MODKIT_DMR_POPULATION_SCALE_PREPROCESS {
     // modkit pileup
     MODKIT_PILEUP_POPULATION_SCALE(ch_pileup_in.bam, ch_pileup_in.ref, [[], []])
 
-    versions = versions.mix(MODKIT_PILEUP_POPULATION_SCALE.out.versions.first())
+    versions = versions.mix(MODKIT_PILEUP_POPULATION_SCALE.out.versions_modkit.first())
 
     ch_pileup_in.ref.set { ch_ref_in }
 
