@@ -25,6 +25,7 @@ workflow INDEX_MODKIT_PILEUP {
     main:
 
     versions = Channel.empty()
+    pileup_6mA_out = Channel.empty()
 
     // Prepare inputs for pileup
 
@@ -50,7 +51,6 @@ workflow INDEX_MODKIT_PILEUP {
 
     // Modkit pileup
    if (params.m6a) {
-        pileup_6mA_out = Channel.empty()
         MODKIT_PILEUP_6mA(ch_bam_in, ch_index_ref, [[], []])
         versions = versions.mix(MODKIT_PILEUP_6mA.out.versions.first())
 
