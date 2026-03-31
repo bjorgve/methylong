@@ -61,88 +61,41 @@ workflow ONT {
 
     FASTQ_UNZIP.out.unzip_input.set{ ch_ont }
 
-
     if (params.no_trim) {
-        if (params.bedgraph) {
-
-            ONT_ALIGN(ch_ont)
-
-            ch_pile_in = ONT_ALIGN.out.ch_pile_in
-            ont_versions = ont_versions.mix(ONT_ALIGN.out.versions)
-            map_stat = ONT_ALIGN.out.flagstat_out
-
-            INDEX_MODKIT_PILEUP(ch_pile_in)
-
-            ont_versions = ont_versions.mix(INDEX_MODKIT_PILEUP.out.versions)
-
-            BED2BEDGRAPH(INDEX_MODKIT_PILEUP.out.pileup_out)
-
-            ont_versions = ont_versions.mix(BED2BEDGRAPH.out.versions)
-        }
-        else {
-
-            ONT_ALIGN(ch_ont)
-
-            ch_pile_in = ONT_ALIGN.out.ch_pile_in
-            ont_versions = ont_versions.mix(ONT_ALIGN.out.versions)
-            map_stat = ONT_ALIGN.out.flagstat_out
-
-            INDEX_MODKIT_PILEUP(ch_pile_in)
-
-            ont_versions = ont_versions.mix(INDEX_MODKIT_PILEUP.out.versions)
-        }
-    }
-    else {
-        if (params.bedgraph) {
-
-            ONT_TRIM_REPAIR(ch_ont)
-
-            ont_versions = ont_versions.mix(ONT_TRIM_REPAIR.out.versions)
-
-            ONT_ALIGN(ONT_TRIM_REPAIR.out.dorado_in)
-
-            ch_pile_in = ONT_ALIGN.out.ch_pile_in
-            ont_versions = ont_versions.mix(ONT_ALIGN.out.versions)
-            map_stat = ONT_ALIGN.out.flagstat_out
-
-            INDEX_MODKIT_PILEUP(ch_pile_in)
-
-            ont_versions = ont_versions.mix(INDEX_MODKIT_PILEUP.out.versions)
-
-            BED2BEDGRAPH(INDEX_MODKIT_PILEUP.out.pileup_out)
-
-            ont_versions = ont_versions.mix(BED2BEDGRAPH.out.versions)
-        }
-        else {
-
-            ONT_TRIM_REPAIR(ch_ont)
-
-            ont_versions = ont_versions.mix(ONT_TRIM_REPAIR.out.versions)
-
-            ONT_ALIGN(ONT_TRIM_REPAIR.out.dorado_in)
-
-            ch_pile_in = ONT_ALIGN.out.ch_pile_in
-            ont_versions = ont_versions.mix(ONT_ALIGN.out.versions)
-            map_stat = ONT_ALIGN.out.flagstat_out
-
-            INDEX_MODKIT_PILEUP(ch_pile_in)
-
-            ont_versions = ont_versions.mix(INDEX_MODKIT_PILEUP.out.versions)
-
-        }
+        ch_reads = ch_ont
+    } else {
+        ONT_TRIM_REPAIR(ch_ont)
+        ont_versions = ont_versions.mix(ONT_TRIM_REPAIR.out.versions)
+        ch_reads = ONT_TRIM_REPAIR.out.dorado_in
     }
 
+    ONT_ALIGN(ch_reads)
 
-    // fiberseq
+    ch_pile_in   = ONT_ALIGN.out.ch_pile_in
+    ont_versions = ont_versions.mix(ONT_ALIGN.out.versions)
+    map_stat     = ONT_ALIGN.out.flagstat_out
+
+    INDEX_MODKIT_PILEUP(ch_pile_in)
+    ont_versions = ont_versions.mix(INDEX_MODKIT_PILEUP.out.versions)
+
+    ch_bg_in = INDEX_MODKIT_PILEUP.out.pileup_out
+
+    if (params.bedgraph) {
+
+        if (params.m6a) {
+                ch_bg_in = ch_bg_in.mix(INDEX_MODKIT_PILEUP.out.pileup_6mA_out) 
+                }
+
+        BED2BEDGRAPH(ch_bg_in)
+        ont_versions = ont_versions.mix(BED2BEDGRAPH.out.versions)
+
+    }
 
     if (params.fiberseq) {
-
         ONT_FIBERSEQ(ch_pile_in)
-
         ont_versions = ont_versions.mix(ONT_FIBERSEQ.out.versions)
-
     }
-
+    
     emit:
     ch_pile_in
     ont_versions
