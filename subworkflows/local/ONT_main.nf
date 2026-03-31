@@ -83,7 +83,7 @@ workflow ONT {
     if (params.bedgraph) {
 
         if (params.m6a) {
-                ch_bg_in = ch_bg_in.mix(INDEX_MODKIT_PILEUP.out.pileup_6mA_out) 
+                ch_bg_in = ch_bg_in.mix(INDEX_MODKIT_PILEUP.out.pileup_6mA_out)
                 }
 
         BED2BEDGRAPH(ch_bg_in)
@@ -95,7 +95,7 @@ workflow ONT {
         ONT_FIBERSEQ(ch_pile_in)
         ont_versions = ont_versions.mix(ONT_FIBERSEQ.out.versions)
     }
-    
+
     emit:
     ch_pile_in
     ont_versions
