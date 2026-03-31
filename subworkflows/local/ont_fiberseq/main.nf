@@ -28,7 +28,7 @@ workflow ONT_FIBERSEQ {
 
     MODKIT_CALLMODS(ch_bam_in)
 
-    versions = versions.mix(MODKIT_CALLMODS.out.versions.first())
+    versions = versions.mix(MODKIT_CALLMODS.out.versions_modkit.first())
 
     FIBERTOOLSRS_ADDNUCLEOSOMES(MODKIT_CALLMODS.out.bam)
 
