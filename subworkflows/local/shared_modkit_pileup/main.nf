@@ -63,7 +63,7 @@ workflow INDEX_MODKIT_PILEUP {
 
     MODKIT_PILEUP.out.bedgz.set { pileup_out }
     TABIX_TABIX(MODKIT_PILEUP.out.bedgz)
-    
+
 
     emit:
     pileup_6mA_out
