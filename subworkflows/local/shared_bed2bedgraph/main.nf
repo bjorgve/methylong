@@ -29,6 +29,4 @@ workflow BED2BEDGRAPH {
     MODKIT_BEDGRAPH(modkit_input)
     PBCPG_BEDGRAPHS(pbcpg_input)
 
-    emit:
-    versions
 }
