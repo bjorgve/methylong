@@ -82,9 +82,9 @@ workflow PACBIO {
     FASTQ_UNZIP.out.unzip_input.set{ input }
 
 
-    // alignment 
+    // alignment
     if (params.pacbio_aligner == 'minimap2') {
-        
+
         PACBIO_ALIGN_MINI(input)
         ch_pile_in = PACBIO_ALIGN_MINI.out.ch_pile_in
         map_stat = PACBIO_ALIGN_MINI.out.flagstat_out
@@ -98,7 +98,7 @@ workflow PACBIO {
 
     }
 
-    // pileup 
+    // pileup
     if (params.pileup_method == 'modkit') {
 
         INDEX_MODKIT_PILEUP(ch_pile_in)
@@ -110,13 +110,13 @@ workflow PACBIO {
         ch_bg_in = PACBIO_SPLIT_STRAND_PBCPG_PILEUP.out.pile_out
     }
 
-    // bed to bedgraph conversion 
+    // bed to bedgraph conversion
      if (params.bedgraph) {
 
         BED2BEDGRAPH(ch_bg_in)
     }
 
-    // use ccsmeth 
+    // use ccsmeth
     if (params.pacbio_modcaller == 'ccsmeth') {
 
         ch_pile_in
@@ -132,9 +132,9 @@ workflow PACBIO {
         )
     }
 
-    // fiberseq 
+    // fiberseq
     if (params.fiberseq) {
-        
+
         PACBIO_FIBERSEQ(ch_pile_in)
         pacbio_versions = pacbio_versions.mix(PACBIO_FIBERSEQ.out.versions)
     }
