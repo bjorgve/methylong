@@ -49,10 +49,10 @@
                 "ont/homo_sapiens/phase/homo_sapiens_haplotagged.bam.bai",
                 "ont/homo_sapiens/phase/homo_sapiens_haplotagged.readlist",
                 "ont/homo_sapiens/phase/homo_sapiens_phased.vcf.gz",
+                "ont/homo_sapiens/phase/homo_sapiens_phased.vcf.gz.tbi",
                 "ont/homo_sapiens/pileup",
                 "ont/homo_sapiens/pileup/homo_sapiens.5mC.bed.gz",
                 "ont/homo_sapiens/pileup/homo_sapiens.5mC.bed.gz.tbi",
-                "ont/homo_sapiens/pileup/homo_sapiens_phased.vcf.gz.tbi",
                 "ont/homo_sapiens/pileup/homo_sapiens_pileup.log",
                 "ont/homo_sapiens/repair",
                 "ont/homo_sapiens/repair/homo_sapiens_repaired.bam",
@@ -79,7 +79,6 @@
                 "homo_sapiens.5mC_hp2.bed.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "homo_sapiens.5mC.bed.gz:md5,401e2a44b482f96d3518c08b9c007936",
                 "homo_sapiens.5mC.bed.gz.tbi:md5,df3576bea37089e0cf06251d651e158a",
-                "homo_sapiens_phased.vcf.gz.tbi:md5,612a644a117e7548e401bf70d074e732",
                 "homo_sapiens.fastq.gz:md5,9de5335e8d250471458bf563920a3186"
             ],
             "No CRAM files",
@@ -110,6 +109,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-02T10:45:00.214921243"
+        "timestamp": "2026-04-02T12:18:07.865952487"
     }
 }
