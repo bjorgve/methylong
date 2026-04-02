@@ -147,11 +147,6 @@ workflow PIPELINE_COMPLETION {
                 multiqc_report.toList(),
             )
         }
-
-        completionSummary(monochrome_logs)
-        if (hook_url) {
-            imNotification(summary_params, hook_url)
-        }
     }
 
     workflow.onError {
