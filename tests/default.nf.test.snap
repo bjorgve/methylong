@@ -79,7 +79,7 @@
                 "homo_sapiens.5mC_hp2.bed.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "homo_sapiens.5mC.bed.gz:md5,401e2a44b482f96d3518c08b9c007936",
                 "homo_sapiens.5mC.bed.gz.tbi:md5,df3576bea37089e0cf06251d651e158a",
-                "homo_sapiens_phased.vcf.gz.tbi:md5,4a64ebda3c6a164e38a8bc2145c7e5fc",
+                "homo_sapiens_phased.vcf.gz.tbi:md5,612a644a117e7548e401bf70d074e732",
                 "homo_sapiens.fastq.gz:md5,9de5335e8d250471458bf563920a3186"
             ],
             "No CRAM files",
@@ -88,7 +88,7 @@
                 "homo_sapiens_haplotagged.bam.bai:exists,size=376"
             ],
             [
-                "homo_sapiens_phased.vcf.gz.tbi:exists,size=129",
+                "homo_sapiens_phased.vcf.gz.tbi:exists,size=131",
                 "homo_sapiensmerge_output.vcf.gz.tbi:exists,size=131"
             ],
             [
@@ -110,6 +110,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-02T10:15:46.909302679"
+        "timestamp": "2026-04-02T10:45:00.214921243"
     }
 }
