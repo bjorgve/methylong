@@ -6,7 +6,7 @@
 
 include { WHATSHAP_PHASE    } from '../../../modules/local/whatshap/phase/main'
 include { WHATSHAP_HAPLOTAG } from '../../../modules/local/whatshap/haplotag/main'
-include { TABIX_TABIX    } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX  as TABIX_TABIX_PHASE  } from '../../../modules/nf-core/tabix/tabix/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_PHASE } from '../../../modules/nf-core/samtools/index/main'
 
 /*
@@ -35,12 +35,12 @@ workflow WHATSHAP {
     // WhatsHap phase
     WHATSHAP_PHASE(ch_input.bam_in, ch_input.ref_in, ch_input.vcf_in )
 
-    TABIX_TABIX(WHATSHAP_PHASE.out.vcfgz)
+    TABIX_TABIX_PHASE(WHATSHAP_PHASE.out.vcfgz)
 
     // join inputs before piping into whatshap_haplotag
     input
         .join(WHATSHAP_PHASE.out.vcfgz)
-        .join(TABIX_TABIX.out.index)
+        .join(TABIX_TABIX_PHASE.out.index)
         .multiMap { meta, bam, bai, ref, fai, _vcf, vcfgz, tbi ->
                 bam_in: [meta, bam, bai]
                 ref_in: [meta, ref, fai]
