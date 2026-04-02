@@ -20,8 +20,14 @@
                 "multiqc/multiqc_data/samtools-flagstat-table.txt",
                 "multiqc/multiqc_plots",
                 "multiqc/multiqc_plots/pdf",
+                "multiqc/multiqc_plots/pdf/samtools-flagstat-pct-table.pdf",
+                "multiqc/multiqc_plots/pdf/samtools-flagstat-table.pdf",
                 "multiqc/multiqc_plots/png",
+                "multiqc/multiqc_plots/png/samtools-flagstat-pct-table.png",
+                "multiqc/multiqc_plots/png/samtools-flagstat-table.png",
                 "multiqc/multiqc_plots/svg",
+                "multiqc/multiqc_plots/svg/samtools-flagstat-pct-table.svg",
+                "multiqc/multiqc_plots/svg/samtools-flagstat-table.svg",
                 "multiqc/multiqc_report.html",
                 "ont",
                 "ont/homo_sapiens",
@@ -73,7 +79,7 @@
                 "homo_sapiens.5mC_hp2.bed.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "homo_sapiens.5mC.bed.gz:md5,401e2a44b482f96d3518c08b9c007936",
                 "homo_sapiens.5mC.bed.gz.tbi:md5,df3576bea37089e0cf06251d651e158a",
-                "homo_sapiens_phased.vcf.gz.tbi:md5,81c5d598f1c6efeac66a4c11fa49a7f5",
+                "homo_sapiens_phased.vcf.gz.tbi:md5,4a64ebda3c6a164e38a8bc2145c7e5fc",
                 "homo_sapiens.fastq.gz:md5,9de5335e8d250471458bf563920a3186"
             ],
             "No CRAM files",
@@ -82,7 +88,7 @@
                 "homo_sapiens_haplotagged.bam.bai:exists,size=376"
             ],
             [
-                "homo_sapiens_phased.vcf.gz.tbi:exists,size=131",
+                "homo_sapiens_phased.vcf.gz.tbi:exists,size=129",
                 "homo_sapiensmerge_output.vcf.gz.tbi:exists,size=131"
             ],
             [
@@ -102,8 +108,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-02T11:26:30.22899094"
+        "timestamp": "2026-04-02T10:15:46.909302679"
     }
 }
