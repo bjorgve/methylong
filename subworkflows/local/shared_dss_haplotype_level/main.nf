@@ -22,8 +22,6 @@ workflow DSS_HAPLOTYPE_LEVEL {
 
     main:
 
-    versions = Channel.empty()
-
     input
         .map { meta, bam, bai, _ref, _fai -> [meta, bam, bai] }
         .set { ch_bam_in }
@@ -34,8 +32,6 @@ workflow DSS_HAPLOTYPE_LEVEL {
 
     // Modkit pileup
     MODKIT_PILEUP_HAPLOTYPE_LEVEL(ch_bam_in, ch_ref, [[], []])
-
-    versions = versions.mix(MODKIT_PILEUP_HAPLOTYPE_LEVEL.out.versions_modkit.first())
 
     MODKIT_PILEUP_HAPLOTYPE_LEVEL.out.bedgz
         .flatMap { meta, files ->
@@ -53,15 +49,9 @@ workflow DSS_HAPLOTYPE_LEVEL {
     // awk
 
     GAWK_1(bed_hp1, [], [])
-
-    versions = versions.mix(GAWK_1.out.versions.first())
-
     GAWK_1.out.output.set { bed_preprocessed_1 }
 
     GAWK_2(bed_hp2, [], [])
-
-    versions = versions.mix(GAWK_2.out.versions.first())
-
     GAWK_2.out.output.set { bed_preprocessed_2 }
 
     bed_preprocessed_1
@@ -75,12 +65,9 @@ workflow DSS_HAPLOTYPE_LEVEL {
     // // DSS dmr
     DSS( bed.bed_preprocessed_1, bed.bed_preprocessed_2 )
 
-    versions = versions.mix(DSS.out.versions.first())
-
     DSS.out.txt.set { dmr_out }
 
     emit:
     pileup_out
     dmr_out
-    versions
 }

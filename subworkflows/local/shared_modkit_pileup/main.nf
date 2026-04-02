@@ -24,19 +24,16 @@ workflow INDEX_MODKIT_PILEUP {
 
     main:
 
-    versions = Channel.empty()
-    pileup_6mA_out = Channel.empty()
+    pileup_6mA_out = channel.empty()
 
     // Prepare inputs for pileup
 
     input
-        .map { meta, _bam, _bai, ref -> [meta, ref] }
+        .map { meta, _bam, _bai, ref -> [meta, ref, []] }
         .set { ch_ref_in }
 
     // Index ref
-    SAMTOOLS_FAIDX(ch_ref_in, [[], []], [])
-
-    versions = versions.mix(SAMTOOLS_FAIDX.out.versions.first())
+    SAMTOOLS_FAIDX(ch_ref_in, [])
 
     input
         .join(SAMTOOLS_FAIDX.out.fai)
@@ -52,14 +49,12 @@ workflow INDEX_MODKIT_PILEUP {
     // Modkit pileup
    if (params.m6a) {
         MODKIT_PILEUP_6mA(ch_bam_in, ch_index_ref, [[], []])
-        versions = versions.mix(MODKIT_PILEUP_6mA.out.versions.first())
 
         MODKIT_PILEUP_6mA.out.bedgz.set { pileup_6mA_out }
         TABIX_TABIX_6MA(MODKIT_PILEUP_6mA.out.bedgz)
     }
 
     MODKIT_PILEUP(ch_bam_in, ch_index_ref, [[], []])
-    versions = versions.mix(MODKIT_PILEUP.out.versions_modkit.first())
 
     MODKIT_PILEUP.out.bedgz.set { pileup_out }
     TABIX_TABIX(MODKIT_PILEUP.out.bedgz)
@@ -68,5 +63,4 @@ workflow INDEX_MODKIT_PILEUP {
     emit:
     pileup_6mA_out
     pileup_out
-    versions
 }

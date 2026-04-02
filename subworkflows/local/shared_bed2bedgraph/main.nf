@@ -29,8 +29,6 @@ workflow BED2BEDGRAPH {
     MODKIT_BEDGRAPH(modkit_input)
     PBCPG_BEDGRAPHS(pbcpg_input)
 
-    versions = MODKIT_BEDGRAPH.out.versions.mix(PBCPG_BEDGRAPHS.out.versions)
-
     emit:
     versions
 }

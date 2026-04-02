@@ -50,6 +50,7 @@ workflow PACBIO {
         if (params.pacbio_modcaller == "ccsmeth") {
 
             CCSMETH_CALLMODS(ch_bam_in)
+
             ch_modbam = CCSMETH_CALLMODS.out.modbam
 
         } else {
@@ -57,7 +58,9 @@ workflow PACBIO {
             // default modcaller is jasmine
 
             PBJASMINE(ch_bam_in)
+
             pacbio_versions = pacbio_versions.mix(PBJASMINE.out.versions.first())
+
             ch_modbam = PBJASMINE.out.bam
 
         }
@@ -82,63 +85,111 @@ workflow PACBIO {
     FASTQ_UNZIP.out.unzip_input.set{ input }
 
 
-    // alignment 
-    if (params.pacbio_aligner == 'minimap2') {
-        
+    // Case when aligner is minimap2 and pileup method is modkit
+    if (params.pacbio_aligner == "minimap2" && params.pileup_method == "modkit") {
+
         PACBIO_ALIGN_MINI(input)
+
         ch_pile_in = PACBIO_ALIGN_MINI.out.ch_pile_in
+        pacbio_versions = pacbio_versions.mix(PACBIO_ALIGN_MINI.out.versions)
         map_stat = PACBIO_ALIGN_MINI.out.flagstat_out
 
-    } else {
+        INDEX_MODKIT_PILEUP(PACBIO_ALIGN_MINI.out.ch_pile_in)
+
+        pacbio_versions = pacbio_versions.mix(INDEX_MODKIT_PILEUP.out.versions)
+
+        if (params.bedgraph) {
+
+            BED2BEDGRAPH(INDEX_MODKIT_PILEUP.out.pileup_out)
+
+            pacbio_versions = pacbio_versions.mix(BED2BEDGRAPH.out.versions)
+        }
+
+    }
+    else if (params.pacbio_aligner == "pbmm2" && params.pileup_method == "modkit") {
 
         PACBIO_ALIGN_PBMM2(input)
+
         ch_pile_in = PACBIO_ALIGN_PBMM2.out.ch_pile_in
         pacbio_versions = pacbio_versions.mix(PACBIO_ALIGN_PBMM2.out.versions)
         map_stat = PACBIO_ALIGN_PBMM2.out.flagstat_out
 
+        INDEX_MODKIT_PILEUP(PACBIO_ALIGN_PBMM2.out.ch_pile_in)
+
+        pacbio_versions = pacbio_versions.mix(INDEX_MODKIT_PILEUP.out.versions)
+
+        if (params.bedgraph) {
+
+            BED2BEDGRAPH(INDEX_MODKIT_PILEUP.out.pileup_out)
+
+            pacbio_versions = pacbio_versions.mix(BED2BEDGRAPH.out.versions)
+        }
+
+    }
+    else if (params.pacbio_aligner == "minimap2" && params.pileup_method == "pbcpgtools") {
+
+        PACBIO_ALIGN_MINI(input)
+
+        ch_pile_in = PACBIO_ALIGN_MINI.out.ch_pile_in
+        pacbio_versions = pacbio_versions.mix(PACBIO_ALIGN_MINI.out.versions)
+        map_stat = PACBIO_ALIGN_MINI.out.flagstat_out
+
+        PACBIO_SPLIT_STRAND_PBCPG_PILEUP(PACBIO_ALIGN_MINI.out.ch_pile_in)
+
+        pacbio_versions = pacbio_versions.mix(PACBIO_SPLIT_STRAND_PBCPG_PILEUP.out.versions)
+
+        if (params.bedgraph) {
+
+            BED2BEDGRAPH(PACBIO_SPLIT_STRAND_PBCPG_PILEUP.out.pile_out)
+
+            pacbio_versions = pacbio_versions.mix(BED2BEDGRAPH.out.versions)
+        }
+
+    }
+    else {
+
+        // default setting when aligner is pbmm2 and pileup method is pbcpgtools
+        PACBIO_ALIGN_PBMM2(input)
+
+        ch_pile_in = PACBIO_ALIGN_PBMM2.out.ch_pile_in
+        pacbio_versions = pacbio_versions.mix(PACBIO_ALIGN_PBMM2.out.versions)
+        map_stat = PACBIO_ALIGN_PBMM2.out.flagstat_out
+
+        PACBIO_SPLIT_STRAND_PBCPG_PILEUP(PACBIO_ALIGN_PBMM2.out.ch_pile_in)
+
+        pacbio_versions = pacbio_versions.mix(PACBIO_SPLIT_STRAND_PBCPG_PILEUP.out.versions)
+
+        if (params.bedgraph) {
+
+            BED2BEDGRAPH(PACBIO_SPLIT_STRAND_PBCPG_PILEUP.out.pile_out)
+
+            pacbio_versions = pacbio_versions.mix(BED2BEDGRAPH.out.versions)
+        }
+
     }
 
-    // pileup 
-    if (params.pileup_method == 'modkit') {
-
-        INDEX_MODKIT_PILEUP(ch_pile_in)
-        ch_bg_in = INDEX_MODKIT_PILEUP.out.pileup_out
-
-    } else {
-
-        PACBIO_SPLIT_STRAND_PBCPG_PILEUP(ch_pile_in)
-        ch_bg_in = PACBIO_SPLIT_STRAND_PBCPG_PILEUP.out.pile_out
-    }
-
-    // bed to bedgraph conversion 
-     if (params.bedgraph) {
-
-        BED2BEDGRAPH(ch_bg_in)
-    }
-
-    // use ccsmeth 
-    if (params.pacbio_modcaller == 'ccsmeth') {
+    if (params.pacbio_modcaller == "ccsmeth") {
 
         ch_pile_in
             .multiMap { meta, bam, _bai, ref ->
-                bam_in: [meta, bam]
-                ref_in: [meta, ref]
+                    bam_in: [meta, bam]
+                    ref_in: [meta, ref]
             }
             .set { ch_ccsmeth_in }
 
-        CCSMETH_CALLFREQB(
-            ch_ccsmeth_in.bam_in,
-            ch_ccsmeth_in.ref_in
-        )
+        CCSMETH_CALLFREQB( ch_ccsmeth_in.bam_in, ch_ccsmeth_in.ref_in )
+
+        pacbio_versions = pacbio_versions.mix(CCSMETH_CALLFREQB.out.versions.first())
+
     }
 
-    // fiberseq 
     if (params.fiberseq) {
-        
-        PACBIO_FIBERSEQ(ch_pile_in)
-        pacbio_versions = pacbio_versions.mix(PACBIO_FIBERSEQ.out.versions)
-    }
 
+        PACBIO_FIBERSEQ(ch_pile_in)
+
+        pacbio_versions = pacbio_versions.mix(PACBIO_FIBERSEQ.out.versions)
+
+    }
 
     emit:
     ch_pile_in

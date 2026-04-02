@@ -22,8 +22,6 @@ workflow WHATSHAP {
 
     main:
 
-    versions = Channel.empty()
-
     // Prepare inputs for whatshap
 
     input
@@ -36,8 +34,6 @@ workflow WHATSHAP {
 
     // WhatsHap phase
     WHATSHAP_PHASE(ch_input.bam_in, ch_input.ref_in, ch_input.vcf_in )
-
-    versions = versions.mix(WHATSHAP_PHASE.out.versions.first())
 
     TABIX_TABIX(WHATSHAP_PHASE.out.vcfgz)
 
@@ -55,19 +51,14 @@ workflow WHATSHAP {
     // WhatsHap haplotag
     WHATSHAP_HAPLOTAG(ch_haplotag.bam_in, ch_haplotag.ref_in, ch_haplotag.phase_in)
 
-    versions = versions.mix(WHATSHAP_HAPLOTAG.out.versions.first())
-
     SAMTOOLS_INDEX_PHASE(WHATSHAP_HAPLOTAG.out.bam)
-
-    versions = versions.mix(SAMTOOLS_INDEX_PHASE.out.versions.first())
 
     input
         .join(WHATSHAP_HAPLOTAG.out.bam)
-        .join(SAMTOOLS_INDEX_PHASE.out.bai)
-        .map { meta, _bam, _bai, ref, fai, _vcf, newbam, newbai -> [meta, newbam, newbai, ref, fai] }
+        .join(SAMTOOLS_INDEX_PHASE.out.index)
+        .map { meta, _bam, _bai, ref, fai, _vcf, newbam, index -> [meta, newbam, index, ref, fai] }
         .set { ch_whatshap_out }
 
     emit:
     ch_whatshap_out
-    versions
 }

@@ -21,8 +21,6 @@ workflow MODKIT_DMR_HAPLOTYPE_LEVEL {
 
     main:
 
-    versions = Channel.empty()
-
     input
         .multiMap { meta, bam, bai, ref, fai  ->
                 bam_in: [meta, bam, bai]
@@ -32,8 +30,6 @@ workflow MODKIT_DMR_HAPLOTYPE_LEVEL {
 
     // Modkit pileup
     MODKIT_PILEUP_HAPLOTYPE_LEVEL(ch_input.bam_in, ch_input.ref_in, [[], []])
-
-    versions = versions.mix(MODKIT_PILEUP_HAPLOTYPE_LEVEL.out.versions_modkit.first())
 
     MODKIT_PILEUP_HAPLOTYPE_LEVEL.out.bedgz
         .flatMap { meta, files ->
@@ -51,11 +47,7 @@ workflow MODKIT_DMR_HAPLOTYPE_LEVEL {
     //tabix
     TABIX_TABIX_1(bed_hp1)
 
-    versions = versions.mix(TABIX_TABIX_1.out.versions_tabix.first())
-
     TABIX_TABIX_2(bed_hp2)
-
-    versions = versions.mix(TABIX_TABIX_2.out.versions_tabix.first())
 
     bed_hp1
     .join(TABIX_TABIX_1.out.index)
@@ -81,12 +73,9 @@ workflow MODKIT_DMR_HAPLOTYPE_LEVEL {
     // Modkit dmr
     DMR_HAPLOTYPE_LEVEL( bed.bed_hp1_gz, bed.bed_hp2_gz, bed.ch_ref )
 
-    versions = versions.mix(DMR_HAPLOTYPE_LEVEL.out.versions.first())
-
     DMR_HAPLOTYPE_LEVEL.out.bedgz.set { dmr_out }
 
     emit:
     pileup_out
     dmr_out
-    versions
 }

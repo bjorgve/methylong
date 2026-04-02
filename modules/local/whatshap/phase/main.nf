@@ -14,7 +14,7 @@ process WHATSHAP_PHASE {
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcfgz
-    path "versions.yml"           , emit: versions
+    tuple val("${task.process}"), val('whatshap'), eval("whatshap --version"), topic: versions, emit: versions_whatshap
 
     when:
     task.ext.when == null || task.ext.when
@@ -34,10 +34,6 @@ process WHATSHAP_PHASE {
         $vcf \\
         $bam
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        whatshap: \$(whatshap --version )
-    END_VERSIONS
     """
 
     stub:
@@ -48,9 +44,5 @@ process WHATSHAP_PHASE {
     echo $args
     echo "" | gzip > ${prefix}.vcf.gz
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        whatshap: \$(whatshap --version )
-    END_VERSIONS
     """
 }
