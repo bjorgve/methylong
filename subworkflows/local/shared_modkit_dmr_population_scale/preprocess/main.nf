@@ -21,11 +21,11 @@ workflow MODKIT_DMR_POPULATION_SCALE_PREPROCESS {
     main:
 
     input
-        .map { meta, _bam, _bai, ref -> [meta, ref] }
+        .map { meta, _bam, _bai, ref -> [meta, ref, []] }
         .set { ch_ref }
 
     // Index ref
-    SAMTOOLS_FAIDX(ch_ref, [[], []], [])
+    SAMTOOLS_FAIDX(ch_ref, [])
 
     // Prepare inputs for modkit pileup
     input
