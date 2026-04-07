@@ -212,7 +212,7 @@ Folder stuctures of the outputs:
 │       ├── group_pileup
 │       │   ├── group1.bed.gz
 │       │   └── group2.bed.gz
-│       └── dmr:modkit/dss
+│       └── group1_group2:dmr:modkit/dss
 │           ├── population_scale_DMLtest.txt
 │           ├── population_scale_callDML.txt
 │           ├── population_scale_callDMR.txt
@@ -272,7 +272,7 @@ Folder stuctures of the outputs:
 │       ├── group_pileup
 │       │   ├── group1.bed.gz
 │       │   └── group2.bed.gz
-│       └── dmr:modkit/dss
+│       └── group1_group2:dmr:modkit/dss
 │           ├── population_scale_DMLtest.txt
 │           ├── population_scale_callDML.txt
 │           ├── population_scale_callDMR.txt
