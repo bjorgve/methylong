@@ -143,15 +143,16 @@ if (sf == "FALSE"){
     print("DMLtest, smoothing=FALSE")
     test<- DMLtest(DSObject, group1=as.vector(unlist(input_list_case, use.names=FALSE)),
         group2=as.vector(unlist(input_list_control, use.names=FALSE)), equal.disp = ed,
-        smoothing = FALSE)
+        smoothing = FALSE,ncores=1)
 }
 if (sf == "TRUE"){
     print("DMLtest, smoothing=TRUE")
     print(DSObject)
     test<- DMLtest(DSObject, group1=as.vector(unlist(input_list_case, use.names=FALSE)),
         group2=as.vector(unlist(input_list_control, use.names=FALSE)), equal.disp = ed,
-        smoothing = FALSE)
+        smoothing = TRUE,ncores=1)
 }
+
 write.table(test,DMCpG_results, sep="\t", row.names=F, quote=F)
 
 DM_loci<- callDML(test, delta=del, p.threshold=pv)
