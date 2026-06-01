@@ -23,7 +23,6 @@ include { INDEX_MODKIT_PILEUP              } from './shared_modkit_pileup/main'
 include { PACBIO_FIBERSEQ                  } from './pacbio_fiberseq/main'
 include { PACBIO_CALLFREQB_CCSMETH         } from './pacbio_callfreqb_ccsmeth/main'
 
-
 /*
 ===========================================
  * PacBio Workflows
