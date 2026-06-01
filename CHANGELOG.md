@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.1.0 - [2025-06-01]
+
+### `Updated`
+
+- update `DSS` script
+- update flowchart
+- when running `population-scale DMR analysis` with `DSS`, very large samples may cause `DSS` to run out of memory and produce no output. To avoid this, `modkit pileup` should be run with `--modified-bases 5mC`
+- adds support for converting ccsmeth bed to bedGraph format
+
 ## v2.0.1 - [2025-11-27]
 
 ### `Fixed`
