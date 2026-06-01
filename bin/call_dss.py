@@ -112,7 +112,7 @@ def main_dma(args):
         pval_cutoff, delta_cutoff, pct_sig, equal_disp
     )
     subprocess.run(cmd, shell=True, check=True)
-    
+
     t_end1 = time.time()
     print("===DSS call DMR costs {:.1f} seconds".format(t_end1 - t_start))
 

@@ -26,7 +26,7 @@ workflow PACBIO_CALLFREQB_CCSMETH {
     // Prepare inputs
 
     input
-        .multiMap { meta, bam, _bai, ref -> 
+        .multiMap { meta, bam, _bai, ref ->
             bam_in: [meta, bam]
             ref_in: [meta, ref]
         }
