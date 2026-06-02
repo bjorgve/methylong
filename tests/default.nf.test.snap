@@ -74,9 +74,9 @@
                 "samtools-flagstat-pct-table.txt:md5,2b206e73550707faea58fd0c762ce9a2",
                 "samtools-flagstat-table.txt:md5,d85b96e27bcf53c9a7ad885e6b280ab3",
                 "homo_sapiens_ont.flagstat:md5,8664205b2167ad7783211565ee87d71c",
-                "homo_sapiens.5mC_combined.bed.gz:md5,b34d839e921c088341ca346e3574fbdf",
-                "homo_sapiens.5mC_hp1.bed.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "homo_sapiens.5mC_hp2.bed.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "homo_sapiens.5mC_combined.bed.gz:md5,8dcfe40349d6f177c3b19d2f5c3d4002",
+                "homo_sapiens.5mC_hp1.bed.gz:md5,8d41528c6e9554309ddffce2fe9e1807",
+                "homo_sapiens.5mC_hp2.bed.gz:md5,6af3623f4a9e429de3b4ba8dbce64d78",
                 "homo_sapiens.5mC.bed.gz:md5,401e2a44b482f96d3518c08b9c007936",
                 "homo_sapiens.5mC.bed.gz.tbi:md5,df3576bea37089e0cf06251d651e158a",
                 "homo_sapiens.fastq.gz:md5,9de5335e8d250471458bf563920a3186"
@@ -88,7 +88,7 @@
             ],
             [
                 "homo_sapiens_phased.vcf.gz.tbi:exists,size=131",
-                "homo_sapiensmerge_output.vcf.gz.tbi:exists,size=131"
+                "homo_sapiensmerge_output.vcf.gz.tbi:exists,size=130"
             ],
             [
                 [
@@ -105,10 +105,10 @@
                 ]
             ]
         ],
+        "timestamp": "2026-06-02T11:35:01.894760058",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-02T12:18:07.865952487"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
     }
 }
