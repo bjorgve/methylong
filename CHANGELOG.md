@@ -9,8 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update `DSS` script
 - update flowchart
+- update `fibertoolsrs` version
+- update `pbjasmine` version
 - when running `population-scale DMR analysis` with `DSS`, very large samples may cause `DSS` to run out of memory and produce no output. To avoid this, `modkit pileup` should be run with `--modified-bases 5mC`
 - adds support for converting ccsmeth bed to bedGraph format
+
+### `Dependencies`
+
+| Dependency     | Old version | New version |
+| -------------- | ----------- | ----------- |
+| `dorado        | 1.4.0       | 2.0.0       |
+| `fibertoolsrs` | 0.7.1       | 0.8.2       |
+| `pbjasmine`    | 2.4.0       | 26.1.3      |
 
 ## v2.0.1 - [2025-11-27]
 

@@ -17,17 +17,17 @@
                     },
                     "fibertoolsrs/addnucleosomes": {
                         "branch": "master",
-                        "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
+                        "git_sha": "5647e3694ef3cde3432a045421339d09148a647c",
                         "installed_by": ["modules"]
                     },
                     "fibertoolsrs/extract": {
                         "branch": "master",
-                        "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
+                        "git_sha": "c63916773f55b8265bfea15442bb4f5566c6a749",
                         "installed_by": ["modules"]
                     },
                     "fibertoolsrs/predictm6a": {
                         "branch": "master",
-                        "git_sha": "b29fd980347bbb0c0d6abb332c83a2be114b4b89",
+                        "git_sha": "1535d16db2e9e94dedbec999ec9962619709cfd5",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
@@ -67,7 +67,7 @@
                     },
                     "pbjasmine": {
                         "branch": "master",
-                        "git_sha": "5e00a5b1453f6ca5e64a3c8034d74e24bc03ef7e",
+                        "git_sha": "ee6024ffd0d928b75c9eb23321c267717b19c5fe",
                         "installed_by": ["modules"]
                     },
                     "pbmm2/align": {

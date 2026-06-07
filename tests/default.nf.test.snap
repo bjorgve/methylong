@@ -101,11 +101,11 @@
                 ],
                 [
                     "homo_sapiensmerge_output.vcf.gz",
-                    "VcfFile [chromosomes=[chr22], sampleCount=1, variantCount=81, phased=false, phasedAutodetect=false]"
+                    "VcfFile [chromosomes=[chr22], sampleCount=1, variantCount=82, phased=false, phasedAutodetect=false]"
                 ]
             ]
         ],
-        "timestamp": "2026-06-02T11:35:01.894760058",
+        "timestamp": "2026-06-07T19:22:10.613036291",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
