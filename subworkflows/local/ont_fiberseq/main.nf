@@ -30,11 +30,11 @@ workflow ONT_FIBERSEQ {
 
     FIBERTOOLSRS_ADDNUCLEOSOMES(MODKIT_CALLMODS.out.bam)
 
-    versions = versions.mix(FIBERTOOLSRS_ADDNUCLEOSOMES.out.versions.first())
+    versions = versions.mix(FIBERTOOLSRS_ADDNUCLEOSOMES.out.versions)
 
     FIBERTOOLSRS_EXTRACT(FIBERTOOLSRS_ADDNUCLEOSOMES.out.bam, 'm6a')
 
-    versions = versions.mix(FIBERTOOLSRS_EXTRACT.out.versions.first())
+    versions = versions.mix(FIBERTOOLSRS_EXTRACT.out.versions)
 
     emit:
     versions

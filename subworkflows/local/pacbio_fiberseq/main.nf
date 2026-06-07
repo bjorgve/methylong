@@ -27,11 +27,11 @@ workflow PACBIO_FIBERSEQ {
 
     FIBERTOOLSRS_PREDICTM6A(ch_bam_in)
 
-    versions = versions.mix(FIBERTOOLSRS_PREDICTM6A.out.versions.first())
+    versions = versions.mix(FIBERTOOLSRS_PREDICTM6A.out.versions)
 
     FIBERTOOLSRS_EXTRACT(FIBERTOOLSRS_PREDICTM6A.out.bam,'m6a')
 
-    versions = versions.mix(FIBERTOOLSRS_EXTRACT.out.versions.first())
+    versions = versions.mix(FIBERTOOLSRS_EXTRACT.out.versions)
 
     emit:
     versions

@@ -58,7 +58,7 @@ workflow PACBIO {
             // default modcaller is jasmine
 
             PBJASMINE(ch_bam_in)
-            pacbio_versions = pacbio_versions.mix(PBJASMINE.out.versions.first())
+            pacbio_versions = pacbio_versions.mix(PBJASMINE.out.versions)
             ch_modbam = PBJASMINE.out.bam
 
         }
