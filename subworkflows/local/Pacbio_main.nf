@@ -58,7 +58,6 @@ workflow PACBIO {
             // default modcaller is jasmine
 
             PBJASMINE(ch_bam_in)
-            pacbio_versions = pacbio_versions.mix(PBJASMINE.out.versions)
             ch_modbam = PBJASMINE.out.bam
 
         }
@@ -132,7 +131,6 @@ workflow PACBIO {
     if (params.fiberseq) {
 
         PACBIO_FIBERSEQ(ch_pile_in)
-        pacbio_versions = pacbio_versions.mix(PACBIO_FIBERSEQ.out.versions)
     }
 
 

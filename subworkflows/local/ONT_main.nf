@@ -86,7 +86,6 @@ workflow ONT {
 
     if (params.fiberseq) {
         ONT_FIBERSEQ(ch_pile_in)
-        ont_versions = ont_versions.mix(ONT_FIBERSEQ.out.versions)
     }
 
     emit:
