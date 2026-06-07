@@ -87,7 +87,7 @@
                 "homo_sapiens_haplotagged.bam.bai:exists,size=376"
             ],
             [
-                "homo_sapiens_phased.vcf.gz.tbi:exists,size=131",
+                "homo_sapiens_phased.vcf.gz.tbi:exists,size=130",
                 "homo_sapiensmerge_output.vcf.gz.tbi:exists,size=131"
             ],
             [
