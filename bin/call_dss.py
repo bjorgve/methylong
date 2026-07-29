@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-this script is a modified version of dma module of NanoMethPhase written by Vahid Akbari, two minor changes:
+this script is a modified version of dma module of NanoMethPhase written by Vahid Akbari, four minor changes:
     1. remove header in input files
     2. accept bedmethyl files
     3. remove "columns" arguments
@@ -85,7 +85,9 @@ def main_dma(args):
         raise ValueError("Control files or directories must be provided!")
 
     out_dir = os.path.abspath(args.out_dir)
-    out_prefix = out_dir + '/' + (args.out_prefix)
+    os.makedirs(out_dir, exist_ok=True)
+    out_prefix = os.path.join(out_dir, args.out_prefix)
+
     Rscript = args.Rscript  # os.path.abspath(args.Rscript)
     script = os.path.abspath(args.script_file)
     dis_merge = args.dis_merge
@@ -106,22 +108,15 @@ def main_dma(args):
                                 "want to overwrite them or use a different "
                                 "prefix".format(check_outs))
 
-    subprocess.call(
-        "{} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(Rscript,
-                                                           script,
-                                                           ",".join(cases),
-                                                           ",".join(controls),
-                                                           out_prefix,
-                                                           dis_merge,
-                                                           minlen,
-                                                           minCG,
-                                                           smoothing_span,
-                                                           smoothing_flag,
-                                                           pval_cutoff,
-                                                           delta_cutoff,
-                                                           pct_sig,
-                                                           equal_disp),
-        shell=True)
+    cmd = [
+        Rscript, script,
+        ",".join(cases), ",".join(controls), out_prefix,
+        str(dis_merge), str(minlen), str(minCG), str(smoothing_span), smoothing_flag,
+        str(pval_cutoff), str(delta_cutoff), str(pct_sig), equal_disp
+    ]
+
+    subprocess.run(cmd, check=True)
+
     t_end1 = time.time()
     print("===DSS call DMR costs {:.1f} seconds".format(t_end1 - t_start))
 
@@ -176,26 +171,26 @@ def main():
     dma_opt.add_argument("--dis_merge", "-dm",
                          action="store",
                          type=int,
-                         default=50,
+                         default=1500,
                          required=False,
                          help=("When two DMRs are very close to each other "
                                "and the distance (in bps) is less than "
                                "this number, they will be merged into one. "
-                               "Default is 50 bps."))
+                               "Default is 1500 bps."))
     dma_opt.add_argument("--minlen", "-ml",
                          action="store",
                          type=int,
-                         default=50,
+                         default=100,
                          required=False,
                          help=("Minimum length (in basepairs) required for "
                                "DMR. Default is 100 bps."))
     dma_opt.add_argument("--minCG", "-mcg",
                          action="store",
                          type=int,
-                         default=3,
+                         default=15,
                          required=False,
                          help=("Minimum number of CpG sites required for "
-                               "DMR. Default is 3."))
+                               "DMR. Default is 15."))
     dma_opt.add_argument("--smoothing_span", "-sms",
                          action="store",
                          type=int,
@@ -208,19 +203,18 @@ def main():
                          type=str,
                          default="TRUE",
                          required=False,
-                         help=("TRUE/FALSE. A flag to indicate whether to , "
-                               "appyly smoothing. Default is FALSE. We "
-                               "recommend to use smoothing=TRUE for "
-                               "whole-genome BS-seq data, and "
+                         help=("TRUE/FALSE. A flag to indicate whether to "
+                               "apply smoothing. We recommend to use smoothing=TRUE "
+                               "for whole-genome BS-seq data, and "
                                "smoothing=FALSE for sparser data such "
                                "like from RRBS or hydroxymethylation "
-                               "data (TAB-seq). If there is not biological "
+                               "data (TAB-seq). If there is no biological "
                                "replicate, smoothing=TRUE is required. "
                                "Default is TRUE"))
     dma_opt.add_argument("--equal_disp", "-ed",
                          action="store",
                          type=str,
-                         default="TRUE",
+                         default="FALSE",
                          required=False,
                          help=("TRUE/FALSE. When there is no biological "
                                "replicate in one or both treatment groups, "
@@ -235,7 +229,7 @@ def main():
                                "estimator. This smoothing procedure uses "
                                "data from neighboring CpG sites as "
                                "\"pseudo-replicate\" for estimating "
-                               "biological variance. Default is TRUE"))
+                               "biological variance. Default is FALSE"))
     dma_opt.add_argument("--pval_cutoff", "-pvc",
                          action="store",
                          type=float,
@@ -249,7 +243,7 @@ def main():
     dma_opt.add_argument("--delta_cutoff", "-dc",
                          action="store",
                          type=float,
-                         default=0.05,
+                         default=0,
                          required=False,
                          help=("A threshold for defining DMR. In DML "
                                "detection procedure, a hypothesis test "
@@ -261,7 +255,7 @@ def main():
                                "delta, and then construct DMR based on "
                                "that. This only works when the test "
                                "results are from 'DMLtest', which is for "
-                               "two-group comparison. Default is 0.05"))
+                               "two-group comparison. Default is 0"))
     dma_opt.add_argument("--pct_sig", "-pct",
                          action="store",
                          type=float,
@@ -277,10 +271,6 @@ def main():
                          action="store_true",
                          required=False,
                          help="If output files exist overwrite them")
-    dma_opt.add_argument("--is_bed",
-                         action="store_true",
-                         required=False,
-                         help="If input files are in bedmethyl format")
     args = parser.parse_args()
 
     main_dma(args)

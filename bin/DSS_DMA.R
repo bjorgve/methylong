@@ -97,11 +97,6 @@ for (n in 1:length(All_files)) {
     }
 }
 
-# for (n in 1:length(All_files)) {
-#   file= as.character(All_files[n])
-#   input_list[[n]] <- read.table(file,header=TRUE,sep = '\t',col.names = c("chr","pos","N","X"))
-# }
-
 output=args[3]
 dis_merge=as.integer(args[4])
 min_len=as.integer(args[5])
@@ -120,8 +115,8 @@ del=as.double(args[10])
 pct=as.double(args[11])
 
 ed=args[12]
-if ( is.na(ed) ){
-    ed=TRUE
+if(length(ed)==0 || is.na(ed)){
+    ed=FALSE
 } else{
     if (ed == "FALSE"){ ed= FALSE }
     if (ed == "TRUE"){ ed= TRUE }
@@ -150,7 +145,7 @@ if (sf == "TRUE"){
     print(DSObject)
     test<- DMLtest(DSObject, group1=as.vector(unlist(input_list_case, use.names=FALSE)),
         group2=as.vector(unlist(input_list_control, use.names=FALSE)), equal.disp = ed,
-        smoothing = FALSE)
+        smoothing = TRUE)
 }
 write.table(test,DMCpG_results, sep="\t", row.names=F, quote=F)
 
