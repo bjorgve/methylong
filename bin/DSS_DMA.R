@@ -93,7 +93,7 @@ for (n in 1:length(All_files)) {
 
     # check if file is empty
     if (nrow(input_list[[n]]) == 0) {
-        stop(paste("File", file, "is empty or could not be read correctly"))
+        stop(paste("File", file, "is empty or could not be read correctly."))
     }
 }
 
