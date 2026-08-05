@@ -7,12 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Updated`
 
-- update `DSS` script
+- update `DSS` script and the default DSS parameters: `dis_merge` (50 to 1500 bp), `minlen` (50 to 100 bp), `minCG` (3 to 15), `equal_disp` (`TRUE` to `FALSE`), and `delta_cutoff` (0.05 to 0)
 - update flowchart
 - update `fibertoolsrs` version
 - update `pbjasmine` version
-- when running `population-scale DMR analysis` with `DSS`, very large samples may cause `DSS` to run out of memory and produce no output. To avoid this, `modkit pileup` should be run with `--modified-bases 5mC`
-- adds support for converting ccsmeth bed to bedGraph format
+- add `--modified-bases 5mC` to `modkit pileup` for haplotype-level and population-scale DMR analyses to reduce memory usage during downstream `DSS` analysis
+- add support for converting `ccsmeth` BED output to bedGraph format
 
 ### `Dependencies`
 
