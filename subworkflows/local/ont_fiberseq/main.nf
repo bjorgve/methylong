@@ -20,8 +20,6 @@ workflow ONT_FIBERSEQ {
 
     main:
 
-    versions = channel.empty()
-
     input
         .map { meta, bam, _bai, _ref -> [meta, bam] }
         .set { ch_bam_in }
@@ -30,12 +28,6 @@ workflow ONT_FIBERSEQ {
 
     FIBERTOOLSRS_ADDNUCLEOSOMES(MODKIT_CALLMODS.out.bam)
 
-    versions = versions.mix(FIBERTOOLSRS_ADDNUCLEOSOMES.out.versions.first())
-
     FIBERTOOLSRS_EXTRACT(FIBERTOOLSRS_ADDNUCLEOSOMES.out.bam, 'm6a')
 
-    versions = versions.mix(FIBERTOOLSRS_EXTRACT.out.versions.first())
-
-    emit:
-    versions
 }

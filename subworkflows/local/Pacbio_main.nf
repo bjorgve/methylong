@@ -5,8 +5,8 @@
  */
 
 include { CCSMETH_CALLMODS                 } from '../../modules/local/ccsmeth/callmods/main'
-include { CCSMETH_CALLFREQB                } from '../../modules/local/ccsmeth/callfreqb/main'
 include { PBJASMINE                        } from '../../modules/nf-core/pbjasmine/main'
+include { MODKIT_BEDGRAPH as CCSMETH_BEDGRAPH } from '../../modules/local/bed2bedgraphs/modkit_bedgraphs/main'
 
 /*
 ===========================================
@@ -21,6 +21,7 @@ include { PACBIO_SPLIT_STRAND_PBCPG_PILEUP } from './pacbio_split_strand_pbcpg_p
 include { BED2BEDGRAPH                     } from './shared_bed2bedgraph/main'
 include { INDEX_MODKIT_PILEUP              } from './shared_modkit_pileup/main'
 include { PACBIO_FIBERSEQ                  } from './pacbio_fiberseq/main'
+include { PACBIO_CALLFREQB_CCSMETH         } from './pacbio_callfreqb_ccsmeth/main'
 
 /*
 ===========================================
@@ -57,7 +58,6 @@ workflow PACBIO {
             // default modcaller is jasmine
 
             PBJASMINE(ch_bam_in)
-            pacbio_versions = pacbio_versions.mix(PBJASMINE.out.versions.first())
             ch_modbam = PBJASMINE.out.bam
 
         }
@@ -111,7 +111,7 @@ workflow PACBIO {
     }
 
     // bed to bedgraph conversion
-     if (params.bedgraph) {
+    if (params.bedgraph) {
 
         BED2BEDGRAPH(ch_bg_in)
     }
@@ -119,24 +119,18 @@ workflow PACBIO {
     // use ccsmeth
     if (params.pacbio_modcaller == 'ccsmeth') {
 
-        ch_pile_in
-            .multiMap { meta, bam, _bai, ref ->
-                bam_in: [meta, bam]
-                ref_in: [meta, ref]
-            }
-            .set { ch_ccsmeth_in }
+        PACBIO_CALLFREQB_CCSMETH(ch_pile_in)
+        ch_ccsmeth_bg_in = PACBIO_CALLFREQB_CCSMETH.out.pileup_out
 
-        CCSMETH_CALLFREQB(
-            ch_ccsmeth_in.bam_in,
-            ch_ccsmeth_in.ref_in
-        )
+        if (params.bedgraph) {
+            CCSMETH_BEDGRAPH(ch_ccsmeth_bg_in)
+        }
     }
 
     // fiberseq
     if (params.fiberseq) {
 
         PACBIO_FIBERSEQ(ch_pile_in)
-        pacbio_versions = pacbio_versions.mix(PACBIO_FIBERSEQ.out.versions)
     }
 
 

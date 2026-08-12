@@ -103,11 +103,9 @@ min_len=as.integer(args[5])
 min_CG=as.integer(args[6])
 ss=as.integer(args[7])
 
-sf=args[8]
-if ( is.na(sf) ){
-    sf="TRUE"
-} else{
-    sf=sf
+sf=as.logical(args[8])
+if (is.na(sf)){
+    sf=TRUE
 }
 
 pv=as.double(args[9])
@@ -134,19 +132,16 @@ print(as.vector(unlist(input_vector_list, use.names=FALSE)))
 
 DSObject<- makeBSseqData(input_list,as.vector(unlist(input_vector_list, use.names=FALSE)))
 
-if (sf == "FALSE"){
-    print("DMLtest, smoothing=FALSE")
-    test<- DMLtest(DSObject, group1=as.vector(unlist(input_list_case, use.names=FALSE)),
-        group2=as.vector(unlist(input_list_control, use.names=FALSE)), equal.disp = ed,
-        smoothing = FALSE)
-}
-if (sf == "TRUE"){
-    print("DMLtest, smoothing=TRUE")
-    print(DSObject)
-    test<- DMLtest(DSObject, group1=as.vector(unlist(input_list_case, use.names=FALSE)),
-        group2=as.vector(unlist(input_list_control, use.names=FALSE)), equal.disp = ed,
-        smoothing = TRUE)
-}
+print(paste0("DMLtest, smoothing=", sf))
+
+test<- DMLtest(
+    DSObject,
+    group1=as.vector(unlist(input_list_case, use.names=FALSE)),
+    group2=as.vector(unlist(input_list_control, use.names=FALSE)),
+    equal.disp=ed,
+    smoothing=sf
+)
+
 write.table(test,DMCpG_results, sep="\t", row.names=F, quote=F)
 
 DM_loci<- callDML(test, delta=del, p.threshold=pv)

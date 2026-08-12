@@ -19,20 +19,12 @@ workflow PACBIO_FIBERSEQ {
 
     main:
 
-    versions = channel.empty()
-
     input
         .map { meta, bam, _bai, _ref -> [meta, bam] }
         .set { ch_bam_in }
 
     FIBERTOOLSRS_PREDICTM6A(ch_bam_in)
 
-    versions = versions.mix(FIBERTOOLSRS_PREDICTM6A.out.versions.first())
-
     FIBERTOOLSRS_EXTRACT(FIBERTOOLSRS_PREDICTM6A.out.bam,'m6a')
 
-    versions = versions.mix(FIBERTOOLSRS_EXTRACT.out.versions.first())
-
-    emit:
-    versions
 }

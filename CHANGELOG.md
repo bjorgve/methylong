@@ -3,6 +3,25 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.1.0 - [2025-06-01]
+
+### `Updated`
+
+- update `DSS` script and the default DSS parameters: `dis_merge` (50 to 1500 bp), `minlen` (50 to 100 bp), `minCG` (3 to 15), `equal_disp` (`TRUE` to `FALSE`), and `delta_cutoff` (0.05 to 0)
+- update flowchart
+- update `fibertoolsrs` version
+- update `pbjasmine` version
+- add `--modified-bases 5mC` to `modkit pileup` for haplotype-level and population-scale DMR analyses to reduce memory usage during downstream `DSS` analysis
+- add support for converting `ccsmeth` BED output to bedGraph format
+
+### `Dependencies`
+
+| Dependency     | Old version | New version |
+| -------------- | ----------- | ----------- |
+| `dorado`       | 1.4.0       | 2.0.0       |
+| `fibertoolsrs` | 0.7.1       | 0.8.2       |
+| `pbjasmine`    | 2.4.0       | 26.1.3      |
+
 ## v2.0.1 - [2025-11-27]
 
 ### `Fixed`
