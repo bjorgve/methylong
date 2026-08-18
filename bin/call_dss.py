@@ -99,6 +99,7 @@ def main_dma(args):
     pval_cutoff = args.pval_cutoff
     delta_cutoff = args.delta_cutoff
     pct_sig = args.pct_sig
+    ncores = args.ncores
 
     # check if outputs exist
     check_outs = [x for x in glob.glob("{}*DM*.txt".format(out_prefix))]
@@ -112,7 +113,8 @@ def main_dma(args):
         Rscript, script,
         ",".join(cases), ",".join(controls), out_prefix,
         str(dis_merge), str(minlen), str(minCG), str(smoothing_span), smoothing_flag,
-        str(pval_cutoff), str(delta_cutoff), str(pct_sig), equal_disp
+        str(pval_cutoff), str(delta_cutoff), str(pct_sig), equal_disp,
+        str(ncores)
     ]
 
     subprocess.run(cmd, check=True)
@@ -267,6 +269,17 @@ def main():
                                "threshold. Default is 0.5. This is mainly "
                                "used for correcting the effects of merging "
                                "of nearby DMRs."))
+    dma_opt.add_argument("--ncores", "-nc",
+                         action="store",
+                         type=int,
+                         default=1,
+                         required=False,
+                         help=("Number of cores passed to DSS DMLtest(ncores=). "
+                               "Default is 1 (serial). If not set, DSS itself "
+                               "would use detectCores()-3 of the physical "
+                               "machine, which ignores the job allocation on "
+                               "shared HPC nodes; the pipeline passes task.cpus. "
+                               "Memory use grows with the number of cores."))
     dma_opt.add_argument("--overwrite", "-ow",
                          action="store_true",
                          required=False,

@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add `--modified-bases 5mC` to `modkit pileup` for haplotype-level and population-scale DMR analyses to reduce memory usage during downstream `DSS` analysis
 - add support for converting `ccsmeth` BED output to bedGraph format
 
+### `Fixed`
+
+- `DSS`: pass `task.cpus` to `DMLtest(ncores=)` via `call_dss.py --ncores`. Previously `DMLtest` used the DSS default of `detectCores()-3` on the physical machine regardless of the task allocation; on shared HPC nodes this forks many more workers than the job was given, workers get OOM-killed, and DSS can return numerically wrong results while exiting 0
+
 ### `Dependencies`
 
 | Dependency     | Old version | New version |

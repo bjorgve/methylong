@@ -28,9 +28,13 @@ process DSS {
     def case_sample     = "--case '${bed_hp1}'"
     def control_sample  = "--control '${bed_hp2}'"
     def out_dir         = "--out_dir ./"
+    // bound DSS::DMLtest(ncores=) to the task allocation; a later --ncores in
+    // ext.args overrides this (argparse keeps the last occurrence)
+    def ncores          = "--ncores ${task.cpus}"
 
     """
     call_dss.py \\
+        $ncores \\
         $args \\
         $out_prefix \\
         $case_sample \\
