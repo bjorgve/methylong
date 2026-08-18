@@ -54,6 +54,8 @@ print("pct_sig")
 print(args[11])
 print("equal_disp")
 print(args[12])
+print("ncores")
+print(args[13])
 print("######################################################################################################################")
 print("reading files")
 
@@ -120,6 +122,17 @@ if(length(ed)==0 || is.na(ed)){
     if (ed == "TRUE"){ ed= TRUE }
 }
 
+# number of parallel workers for DMLtest; default 1 (serial). Without an
+# explicit value DSS uses detectCores()-3 of the machine, not of the allocation.
+nc=suppressWarnings(as.integer(args[13]))
+if (length(nc)==0 || is.na(nc) || nc < 1){
+    nc=1L
+}
+max_cores=parallel::detectCores()
+if (!is.na(max_cores) && nc > max_cores){
+    nc=max_cores
+}
+
 DMCpG_results=paste(output,"_DMLtest.txt",sep = "")
 DMLocus_results=paste(output,"_callDML.txt",sep = "")
 DMRegion_results=paste(output,"_callDMR.txt",sep = "")
@@ -132,14 +145,15 @@ print(as.vector(unlist(input_vector_list, use.names=FALSE)))
 
 DSObject<- makeBSseqData(input_list,as.vector(unlist(input_vector_list, use.names=FALSE)))
 
-print(paste0("DMLtest, smoothing=", sf))
+print(paste0("DMLtest, smoothing=", sf, ", ncores=", nc))
 
 test<- DMLtest(
     DSObject,
     group1=as.vector(unlist(input_list_case, use.names=FALSE)),
     group2=as.vector(unlist(input_list_control, use.names=FALSE)),
     equal.disp=ed,
-    smoothing=sf
+    smoothing=sf,
+    ncores=nc
 )
 
 write.table(test,DMCpG_results, sep="\t", row.names=F, quote=F)
