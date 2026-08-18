@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add `--modified-bases 5mC` to `modkit pileup` for haplotype-level and population-scale DMR analyses to reduce memory usage during downstream `DSS` analysis
 - add support for converting `ccsmeth` BED output to bedGraph format
 
+### `Fixed`
+
+- haplotype-level DMR: select `modkit pileup --phased` outputs by `_hp1.bed.gz` / `_hp2.bed.gz` in `shared_dss_haplotype_level` and `shared_modkit_dmr_haplotype_level`; the previous `_1.bed.gz` / `_2.bed.gz` filters matched nothing, so GAWK/DSS (or modkit dmr) never ran and no haplotype-level DMR output was produced
+
 ### `Dependencies`
 
 | Dependency     | Old version | New version |
