@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update `pbjasmine` version
 - add `--modified-bases 5mC` to `modkit pileup` for haplotype-level and population-scale DMR analyses to reduce memory usage during downstream `DSS` analysis
 - add support for converting `ccsmeth` BED output to bedGraph format
+- restore `--combine-strands` for the haplotype-level and population-scale `modkit pileup` when `--all_contexts` is not set (CG is palindromic, so DSS sees one locus per CpG with the coverage of both strands, as in v2.0.0); it stays off under `--all_contexts`, where modkit rejects it for CHG/CHH (#77)
 
 ### `Fixed`
 
