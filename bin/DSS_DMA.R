@@ -147,13 +147,28 @@ DSObject<- makeBSseqData(input_list,as.vector(unlist(input_vector_list, use.name
 
 print(paste0("DMLtest, smoothing=", sf, ", ncores=", nc))
 
-test<- DMLtest(
-    DSObject,
-    group1=as.vector(unlist(input_list_case, use.names=FALSE)),
-    group2=as.vector(unlist(input_list_control, use.names=FALSE)),
-    equal.disp=ed,
-    smoothing=sf,
-    ncores=nc
+# DMLtest runs its per-chromosome work through parallel::mclapply. If a
+# forked worker is killed (typically OOM), mclapply only warns
+# ("scheduled core(s) did not deliver results") and DSS continues with a
+# short dispersion vector that gets recycled, so the tables are silently
+# wrong and R still exits 0. Turn that warning into an error.
+test<- withCallingHandlers(
+    DMLtest(
+        DSObject,
+        group1=as.vector(unlist(input_list_case, use.names=FALSE)),
+        group2=as.vector(unlist(input_list_control, use.names=FALSE)),
+        equal.disp=ed,
+        smoothing=sf,
+        ncores=nc
+    ),
+    warning=function(w){
+        if (grepl("did not deliver", conditionMessage(w), fixed=TRUE)){
+            stop("DSS parallel worker died (", conditionMessage(w),
+                 "); results would be corrupt. Reduce ncores or increase memory.",
+                 call.=FALSE)
+        }
+        # any other warning: leave it to the default handler
+    }
 )
 
 write.table(test,DMCpG_results, sep="\t", row.names=F, quote=F)
