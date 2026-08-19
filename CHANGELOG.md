@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add `--modified-bases 5mC` to `modkit pileup` for haplotype-level and population-scale DMR analyses to reduce memory usage during downstream `DSS` analysis
 - add support for converting `ccsmeth` BED output to bedGraph format
 
+### `Fixed`
+
+- `DORADO_ALIGNER`: merge the per-run BAMs that `dorado aligner` (>= 1.4) writes into its nested `--output-dir` tree back into one BAM per sample. With a sample BAM merged from several sequencing runs, dev emitted a list of BAMs per sample and `SAMTOOLS_FLAGSTAT` (and everything downstream) failed
+
 ### `Dependencies`
 
 | Dependency     | Old version | New version |
