@@ -47,9 +47,6 @@ process DORADO_ALIGNER {
     """
 
     stub:
-    def args   = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
-
     """
     mkdir -p ${meta.id}
     touch ${meta.id}/${meta.id}.bam
