@@ -51,8 +51,9 @@ process DORADO_ALIGNER {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    touch ${prefix}/${prefix}.bam
-    touch ${prefix}/${prefix}.bai
+    mkdir -p ${meta.id}
+    touch ${meta.id}/${meta.id}.bam
+    touch ${meta.id}/${meta.id}.bam.bai
 
     """
 }
