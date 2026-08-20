@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - `DSS`: pass `task.cpus` to `DMLtest(ncores=)` via `call_dss.py --ncores`. Previously `DMLtest` used the DSS default of `detectCores()-3` on the physical machine regardless of the task allocation; on shared HPC nodes this forks many more workers than the job was given, workers get OOM-killed, and DSS can return numerically wrong results while exiting 0
+- `DSS`: fail the task when an `mclapply` worker dies or errors instead of writing silently corrupt tables with exit 0 (the lost results previously only produced a warning and a recycled dispersion vector)
 
 ### `Dependencies`
 

@@ -147,11 +147,21 @@ DSObject<- makeBSseqData(input_list,as.vector(unlist(input_vector_list, use.name
 
 print(paste0("DMLtest, smoothing=", sf, ", ncores=", nc))
 
-# DMLtest runs its per-chromosome work through parallel::mclapply. If a
-# forked worker is killed (typically OOM), mclapply only warns
-# ("scheduled core(s) did not deliver results") and DSS continues with a
-# short dispersion vector that gets recycled, so the tables are silently
-# wrong and R still exits 0. Turn that warning into an error.
+# DMLtest runs its work through parallel::mclapply (chunks of loci). Two
+# failure modes both end with corrupt tables and exit 0 unless caught:
+# a forked worker is killed (typically OOM) - mclapply only warns
+# ("scheduled core(s) ... did not deliver results"); or a worker fails at
+# R level (e.g. an allocation failure) - mclapply warns "all scheduled
+# cores encountered errors in user code" / "... function calls resulted in
+# an error". Either way DSS continues with a short dispersion vector that
+# gets recycled ("number of items to replace is not a multiple of
+# replacement length"). Turn all of these warnings into errors; the
+# recycling warning is the terminal backstop in case the mclapply wording
+# ever changes.
+fatal_patterns=c("did not deliver",
+                 "encountered errors in user code",
+                 "resulted in an error",
+                 "not a multiple of replacement length")
 test<- withCallingHandlers(
     DMLtest(
         DSObject,
@@ -162,7 +172,8 @@ test<- withCallingHandlers(
         ncores=nc
     ),
     warning=function(w){
-        if (grepl("did not deliver", conditionMessage(w), fixed=TRUE)){
+        if (any(vapply(fatal_patterns, grepl, logical(1),
+                       x=conditionMessage(w), fixed=TRUE))){
             stop("DSS parallel worker died (", conditionMessage(w),
                  "); results would be corrupt. Reduce ncores or increase memory.",
                  call.=FALSE)
