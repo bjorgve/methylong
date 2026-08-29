@@ -26,7 +26,7 @@ workflow FASTQ_UNZIP {
         .set { fastqc_in }
 
     FASTQC(fastqc_in)
-    fastqc_log = fastqc_log.mix(FASTQC.out.zip.collect { it[1] }.ifEmpty([]))
+    fastqc_log = fastqc_log.mix(FASTQC.out.zip)
 
     input
         .map { meta, _modbam, ref -> [meta, ref] }

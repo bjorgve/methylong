@@ -54,7 +54,7 @@ workflow ONT {
 
     FASTQ_UNZIP(ch_input)
 
-    map_stat = map_stat.mix(FASTQ_UNZIP.out.fastqc_log.collect { it[1] }.ifEmpty([]))
+    map_stat = map_stat.mix(FASTQ_UNZIP.out.fastqc_log)
 
     FASTQ_UNZIP.out.unzip_input.set{ ch_ont }
 
@@ -69,7 +69,7 @@ workflow ONT {
     ONT_ALIGN(ch_reads)
 
     ch_pile_in   = ONT_ALIGN.out.ch_pile_in
-    map_stat     = ONT_ALIGN.out.flagstat_out
+    map_stat     = map_stat.mix(ONT_ALIGN.out.flagstat_out)
 
     INDEX_MODKIT_PILEUP(ch_pile_in)
 
