@@ -77,7 +77,7 @@ workflow PACBIO {
 
     FASTQ_UNZIP(input_modbam)
 
-    map_stat = map_stat.mix(FASTQ_UNZIP.out.fastqc_log.collect { it[1] }.ifEmpty([]))
+    map_stat = map_stat.mix(FASTQ_UNZIP.out.fastqc_log)
 
     FASTQ_UNZIP.out.unzip_input.set{ input }
 
@@ -87,14 +87,14 @@ workflow PACBIO {
 
         PACBIO_ALIGN_MINI(input)
         ch_pile_in = PACBIO_ALIGN_MINI.out.ch_pile_in
-        map_stat = PACBIO_ALIGN_MINI.out.flagstat_out
+        map_stat = map_stat.mix(PACBIO_ALIGN_MINI.out.flagstat_out)
 
     } else {
 
         PACBIO_ALIGN_PBMM2(input)
         ch_pile_in = PACBIO_ALIGN_PBMM2.out.ch_pile_in
         pacbio_versions = pacbio_versions.mix(PACBIO_ALIGN_PBMM2.out.versions)
-        map_stat = PACBIO_ALIGN_PBMM2.out.flagstat_out
+        map_stat = map_stat.mix(PACBIO_ALIGN_PBMM2.out.flagstat_out)
 
     }
 

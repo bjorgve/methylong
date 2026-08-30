@@ -9,5 +9,9 @@ report_section_order:
     order: -1002
 
 export_plots: true
+# Kaleido static export is slow to start inside containers; the 30s default
+# gave "0 of N plots exported" on Apptainer/Saga. A 2-sample run needed 253s,
+# so leave generous headroom for larger cohorts.
+export_plots_timeout: 1800
 
 disable_version_detection: true
