@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- `MultiQC`: FastQC results now reach the MultiQC report. The FastQC zips were mixed into the `map_stat` channel, but the aligner blocks then reassigned `map_stat` to the flagstat output outright, discarding them; `map_stat` is now kept `[meta, file]`-shaped end to end and every source is mixed in
+- `MultiQC`: raise the Kaleido static plot export timeout (`export_plots_timeout`) from the 30s default to 1800s; inside Apptainer the export blew past 30s and left `multiqc_plots/{png,pdf,svg}` empty
 - `DSS`: pass `task.cpus` to `DMLtest(ncores=)` via `call_dss.py --ncores`. Previously `DMLtest` used the DSS default of `detectCores()-3` on the physical machine regardless of the task allocation; on shared HPC nodes this forks many more workers than the job was given, workers get OOM-killed, and DSS can return numerically wrong results while exiting 0
 - haplotype-level DMR: select `modkit pileup --phased` outputs by `_hp1.bed.gz` / `_hp2.bed.gz` in `shared_dss_haplotype_level` and `shared_modkit_dmr_haplotype_level`; the previous `_1.bed.gz` / `_2.bed.gz` filters matched nothing, so GAWK/DSS (or modkit dmr) never ran and no haplotype-level DMR output was produced
 - `DORADO_ALIGNER`: merge the per-run BAMs that `dorado aligner` (>= 1.4) writes into its nested `--output-dir` tree back into one BAM per sample. With a sample BAM merged from several sequencing runs, dev emitted a list of BAMs per sample and `SAMTOOLS_FLAGSTAT` (and everything downstream) failed
